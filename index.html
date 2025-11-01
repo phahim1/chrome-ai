@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minimal API Test</title>
+  <meta http-equiv="origin-trial" content="Au2XGBVCng8laaatAT3TPCflJo5N0w0MVS">
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
+    #prompt { width: 100%; box-sizing: border-box; }
+    #output { background: #f4f4f4; padding: 10px; border-radius: 5px; min-height: 50px; }
+  </style>
+</head>
+<body>
+
+  <h1>BloomAI - Minimal Proof of Concept</h1>
+  <p>This is a minimal technical demo for the "BloomAI" project concept. 
+     (Full concept is in the project description).</p>
+
+  <h3>Enter a topic to get a summary:</h3>
+  <textarea id="prompt" rows="3">Photosynthesis</textarea>
+  <button id="runButton">Run Summarizer API</button>
+
+  <h3>AI Output:</h3>
+  <pre id="output">Click the button to get a summary...</pre>
+
+  <script>
+    document.getElementById('runButton').addEventListener('click', async () => {
+      const outputElement = document.getElementById('output');
+      const promptText = document.getElementById('prompt').value;
+      outputElement.innerText = 'Working...';
+
+      try {
+        // Check if the Summarizer API is available
+        if (!window.ai || !window.ai.summarizer) {
+          outputElement.innerText = 'Error: Built-in AI (Summarizer) is not available. Make sure you are on Chrome 144+ with the flag enabled.';
+          return;
+        }
+
+        // Get the summarizer
+        const summarizer = await window.ai.summarizer();
+        
+        // Summarize the text from the text area
+        const result = await summarizer.summarize(promptText);
+
+        // Display the result
+        outputElement.innerText = result.summary;
+
+      } catch (e) {
+        outputElement.innerText = `Error: ${e.message}`;
+      }
+    });
+  </script>
+
+</body>
+</html>
